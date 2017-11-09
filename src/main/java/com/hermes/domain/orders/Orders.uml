@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="94.5" y="450.0">com.hermes.domain.orders.BasicOrder</node>
+    <node x="0.0" y="0.0">com.hermes.domain.orders.Order</node>
+    <node x="0.0" y="225.0">com.hermes.domain.orders.AbstractOrder</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.hermes.domain.orders.AbstractOrder" target="com.hermes.domain.orders.Order">
+      <point x="0.0" y="-87.5" />
+      <point x="0.0" y="87.5" />
+    </edge>
+    <edge source="com.hermes.domain.orders.BasicOrder" target="com.hermes.domain.orders.AbstractOrder">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="87.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="149.0" y="240.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>public</VISIBILITY>
+</Diagram>
+

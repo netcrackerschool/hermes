@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context-4.1.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <context:property-placeholder location="classpath:persistence-mysql.properties" />
+
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource" />
+        <property name="annotatedClasses">
+            <list>
+                <value>com.hermes.domain.users.BasicUser</value>
+                <value>com.hermes.domain.users.BasicUser</value>
+                <value>com.hermes.domain.users.RepresentedUser</value>
+
+                <value>com.hermes.domain.employees.AbstractEmployee</value>
+                <value>com.hermes.domain.employees.AbstractDriver</value>
+                <value>com.hermes.domain.employees.BasicDriver</value>
+
+                <value>com.hermes.domain.vehicles.AbstractVehicle</value>
+                <value>com.hermes.domain.vehicles.AbstractTruck</value>
+                <value>com.hermes.domain.vehicles.AbstractSolidTruck</value>
+                <value>com.hermes.domain.vehicles.BasicTruck</value>
+
+                <value>com.hermes.domain.cargo.AbstractCargo</value>
+                <value>com.hermes.domain.cargo.AbstractSolidCargo</value>
+                <value>com.hermes.domain.cargo.Box</value>
+
+                <value>com.hermes.domain.places.AbstractPlace</value>
+                <value>com.hermes.domain.places.AbstractBase</value>
+                <value>com.hermes.domain.places.AbstractFix</value>
+                <value>com.hermes.domain.places.BasicClientBase</value>
+                <value>com.hermes.domain.places.BasicCompanyBase</value>
+                <value>com.hermes.domain.places.BasicFix</value>
+
+                <value>com.hermes.domain.hauls.AbstractHaul</value>
+                <value>com.hermes.domain.hauls.BasicHaul</value>
+
+                <value>com.hermes.domain.milestones.AbstractMilestone</value>
+                <value>com.hermes.domain.milestones.StartMilestone</value>
+                <value>com.hermes.domain.milestones.FinishMilestone</value>
+
+                <value>com.hermes.domain.orders.AbstractOrder</value>
+                <value>com.hermes.domain.orders.BasicOrder</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <!--<prop key="hibernate.hbm2ddl.auto">create</prop>-->
+                <prop key="hibernate.dialect">${hibernate.dialect}</prop>
+            </props>
+        </property>
+    </bean>
+
+    <bean id="dataSource"
+          class="org.apache.tomcat.dbcp.dbcp.BasicDataSource">
+        <property name="driverClassName" value="${jdbc.driverClassName}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.user}" />
+        <property name="password" value="${jdbc.pass}" />
+    </bean>
+
+    <bean id="transactionManager"
+          class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+
+    <tx:annotation-driven />
+
+    <!--<tx:advice id="txAdvice" transaction-manager="transactionManager">-->
+        <!--<tx:attributes>-->
+            <!--<tx:method name="get*" read-only="true" />-->
+            <!--<tx:method name="contains*" read-only="true" />-->
+            <!--<tx:method name="*" />-->
+        <!--</tx:attributes>-->
+    <!--</tx:advice>-->
+
+    <!--<aop:config>-->
+        <!--<aop:pointcut id="userServicePointCut"-->
+                      <!--expression="execution(* com.hermes.infrastructure.dataaccess.services.*Service.*(..))" />-->
+        <!--<aop:advisor advice-ref="txAdvice" pointcut-ref="userServicePointCut" />-->
+    <!--</aop:config>-->
+
+    <bean id="persistenceExceptionTranslationPostProcessor"
+          class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
+
+    <!-- //////////////////////////////////////////////////////////////////////////////////// -->
+
+    <bean id="genericRepository"
+          abstract="true"
+          class="com.hermes.infrastructure.dataaccess.services.GenericRepositoryImpl">
+        <constructor-arg ref="sessionFactory"/>
+    </bean>
+
+    <bean id="cargoService"
+          class="com.hermes.infrastructure.dataaccess.services.CargoServiceImpl">
+        <constructor-arg>
+            <bean parent="genericRepository">
+                <constructor-arg type = "java.lang.Class">
+                    <value>com.hermes.domain.cargo.AbstractCargo</value>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="orderService"
+          class="com.hermes.infrastructure.dataaccess.services.OrderServiceImpl">
+        <constructor-arg>
+            <bean parent="genericRepository">
+                <constructor-arg type = "java.lang.Class">
+                    <value>com.hermes.domain.orders.AbstractOrder</value>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="haulService"
+          class="com.hermes.infrastructure.dataaccess.services.HaulServiceImpl">
+        <constructor-arg>
+            <bean parent="genericRepository">
+                <constructor-arg type = "java.lang.Class">
+                    <value>com.hermes.domain.hauls.AbstractHaul</value>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="employeeService"
+          class="com.hermes.infrastructure.dataaccess.services.EmployeeServiceImpl">
+        <constructor-arg>
+            <bean parent="genericRepository">
+                <constructor-arg type = "java.lang.Class">
+                    <value>com.hermes.domain.employees.AbstractEmployee</value>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="vehicleService"
+          class="com.hermes.infrastructure.dataaccess.services.VehicleServiceImpl">
+        <constructor-arg>
+            <bean parent="genericRepository">
+                <constructor-arg type = "java.lang.Class">
+                    <value>com.hermes.domain.vehicles.AbstractVehicle</value>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="milestoneService"
+          class="com.hermes.infrastructure.dataaccess.services.MilestoneServiceImpl">
+        <constructor-arg>
+            <bean parent="genericRepository">
+                <constructor-arg type = "java.lang.Class">
+                    <value>com.hermes.domain.milestones.AbstractMilestone</value>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="placeService"
+          class="com.hermes.infrastructure.dataaccess.services.PlaceServiceImpl">
+        <constructor-arg>
+            <bean parent="genericRepository">
+                <constructor-arg type = "java.lang.Class">
+                    <value>com.hermes.domain.places.AbstractPlace</value>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <bean id="userService"
+          class="com.hermes.infrastructure.dataaccess.services.UserServiceImpl">
+        <constructor-arg>
+            <bean parent="genericRepository">
+                <constructor-arg type = "java.lang.Class">
+                    <value>com.hermes.domain.users.AbstractUser</value>
+                </constructor-arg>
+            </bean>
+        </constructor-arg>
+    </bean>
+
+    <!-- //////////////////////////////////////////////////////////////////////////////////// -->
+
+    <bean id="userFactory"
+          class="com.hermes.domain.users.UserFactoryImpl">
+        <constructor-arg ref="employeeFactory"/>
+    </bean>
+
+    <bean id="employeeFactory"
+          class="com.hermes.domain.employees.EmployeeFactoryImpl">
+    </bean>
+
+    <bean id="placeFactory"
+          class="com.hermes.domain.places.PlaceFactoryImpl">
+    </bean>
+
+    <bean id="vehicleFactory"
+          class="com.hermes.domain.vehicles.VehicleFactoryImpl">
+    </bean>
+
+    <!-- //////////////////////////////////////////////////////////////////////////////////// -->
+
+    <bean id="userWhich"
+          class="com.hermes.infrastructure.dataaccess.specifications.users.UserWhich">
+    </bean>
+
+    <!-- //////////////////////////////////////////////////////////////////////////////////// -->
+
+    <bean id="adminState"
+          class="com.hermes.application.states.AdminState">
+        <constructor-arg ref="userService"/>
+        <constructor-arg ref="userFactory"/>
+        <constructor-arg ref="userWhich"/>
+    </bean>
+
+    <bean id="driverState"
+          class="com.hermes.application.states.DriverState">
+    </bean>
+
+    <bean id="informerState"
+          class="com.hermes.application.states.InformerState">
+        <constructor-arg ref="placeService"/>
+        <constructor-arg ref="placeFactory"/>
+    </bean>
+
+
+    <bean id="managerState"
+          class="com.hermes.application.states.ManagerState">
+        <constructor-arg ref="orderService"/>
+    </bean>
+
+    <bean id="plannerState"
+          class="com.hermes.application.states.PlannerState">
+    </bean>
+
+    <!-- //////////////////////////////////////////////////////////////////////////////////// -->
+
+    <bean id="userStateFactory"
+          class="com.hermes.application.states.UserStateFactory">
+        <constructor-arg ref="userService"/>
+        <constructor-arg ref="adminState"/>
+        <constructor-arg ref="driverState"/>
+        <constructor-arg ref="managerState"/>
+        <constructor-arg ref="plannerState"/>
+        <constructor-arg ref="informerState"/>
+        <constructor-arg ref="userWhich"/>
+    </bean>
+
+    <bean id="startState"
+          class="com.hermes.application.states.StartState">
+        <constructor-arg ref="userStateFactory"/>
+    </bean>
+
+    <bean id="consoleView"
+          class="com.hermes.userinterface.ConsoleView">
+        <constructor-arg type="java.io.InputStream">
+                <util:constant id = "out" static-field="java.lang.System.in" />
+        </constructor-arg>
+        <constructor-arg type="java.io.PrintStream">
+            <util:constant id = "out" static-field="java.lang.System.out" />
+        </constructor-arg>
+    </bean>
+
+    <bean id="controller"
+          class="com.hermes.userinterface.Controller">
+        <constructor-arg ref="consoleView"/>
+        <constructor-arg ref="startState"/>
+    </bean>
+
+    <!-- //////////////////////////////////////////////////////////////////////////////////// -->
+
+</beans>

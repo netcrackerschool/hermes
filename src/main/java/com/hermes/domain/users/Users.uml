@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement />
+  <nodes>
+    <node x="0.0" y="48.0">com.hermes.domain.users.User</node>
+    <node x="82.99999999999999" y="0.0">com.hermes.domain.users.Role</node>
+    <node x="1.0" y="177.0">com.hermes.domain.users.AbstractUser</node>
+    <node x="52.624999999999986" y="339.0">com.hermes.domain.users.RepresentedUser</node>
+    <node x="78.12499999999999" y="258.0">com.hermes.domain.users.BasicUser</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.hermes.domain.users.AbstractUser" target="com.hermes.domain.users.Role">
+      <point x="30.5" y="-15.5" />
+      <point x="92.5" y="152.0" />
+      <point x="119.74999999999999" y="152.0" />
+      <point x="-36.75" y="63.5" />
+    </edge>
+    <edge source="com.hermes.domain.users.BasicUser" target="com.hermes.domain.users.AbstractUser">
+      <point x="-24.75" y="-15.5" />
+      <point x="102.87499999999999" y="233.0" />
+      <point x="62.0" y="233.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="com.hermes.domain.users.BasicUser" target="com.hermes.domain.users.Role">
+      <point x="24.75" y="-15.5" />
+      <point x="152.375" y="233.0" />
+      <point x="193.25" y="233.0" />
+      <point x="36.75" y="63.5" />
+    </edge>
+    <edge source="com.hermes.domain.users.AbstractUser" target="com.hermes.domain.users.User">
+      <point x="-30.5" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="com.hermes.domain.users.RepresentedUser" target="com.hermes.domain.users.BasicUser">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="115.0" y="185.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Constructors</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>public</VISIBILITY>
+</Diagram>
+
